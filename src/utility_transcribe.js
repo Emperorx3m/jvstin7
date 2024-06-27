@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-const socket = new io.connect("http://0.0.0.0:10000/", {transports: ['websocket']});
+const socket = io("http://localhost:10000/");
 
 // Stream Audio
 let bufferSize = 2048,

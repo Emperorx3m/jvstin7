@@ -3,17 +3,16 @@ import asyncio
 import socketio
 from aiohttp import web
 
-from backend.settings import BACKEND_PORT
+from settings import BACKEND_PORT
 from google_speech_wrapper import GoogleSpeechWrapper
 
 app = web.Application()
-sio = socketio.AsyncServer(cors_allowed_origins=[])  # * is bad
+sio = socketio.AsyncServer(cors_allowed_origins=["http://localhost:3000"])  # * is bad
 
 # Binds our Socket.IO server to our web app instance
 sio.attach(app)
 
 
-@asyncio.coroutine
 @sio.on('startGoogleCloudStream')
 async def start_google_stream(sid, config):
     print(f'Starting streaming audio data from client {sid}')
@@ -31,4 +30,7 @@ async def close_google_stream(sid):
     await GoogleSpeechWrapper.stop_recognition_stream(sid)
 
 
-web.run_app(app, port=BACKEND_PORT)
+if __name__ == "__main__":
+    web.run_app(app, port=BACKEND_PORT)
+
+
